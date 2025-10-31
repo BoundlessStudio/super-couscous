@@ -7,7 +7,7 @@
     "weather-server": "./build/index.js"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "node ./scripts/build.mjs"
   },
   "files": [
     "build"
