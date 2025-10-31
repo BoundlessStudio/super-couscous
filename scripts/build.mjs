@@ -99,10 +99,18 @@ for (const [relativeOutput, shebangLine] of shebangMap) {
   if (existingContent.startsWith(shebangLine)) {
     continue;
   }
-  const normalizedContent = existingContent.startsWith('#!')
-    ? existingContent.slice(existingContent.indexOf('\n') + 1)
-    : existingContent;
-  writeFileSync(outputPath, `${shebangLine}\n${normalizedContent}`);
+  if (existingContent.startsWith('#!')) {
+    const newlineIndex = existingContent.indexOf('\n');
+    const remainingContent =
+      newlineIndex === -1 ? '' : existingContent.slice(newlineIndex + 1);
+    const contentToWrite = remainingContent
+      ? `${shebangLine}\n${remainingContent}`
+      : `${shebangLine}\n`;
+    writeFileSync(outputPath, contentToWrite);
+    continue;
+  }
+
+  writeFileSync(outputPath, `${shebangLine}\n${existingContent}`);
 }
 
 rmSync(tempConfigPath, { force: true });
